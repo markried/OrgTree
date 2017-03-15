@@ -35,5 +35,8 @@
     <ClCompile Include="Schmidt-CS3100Project2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OrgTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
