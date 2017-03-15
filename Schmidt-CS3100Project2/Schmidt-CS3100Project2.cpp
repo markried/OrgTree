@@ -25,6 +25,7 @@ int main()
 	TreeNode* LeftChildRightSib = test.rightSibling(oldBossLeftChild);
 	TreeNode* Ye = test.rightSibling(LeftChildRightSib);
 	TreeNode* nullboiintheory = test.rightSibling(Ye);
+	int count = test.getSize();
 	return 0;
 }
 
