@@ -24,10 +24,20 @@ int main()
 	TreeNode* TestEmp1 = test.leftmostChild(oldBoss);
 	TreeNode* TestEmp2 = test.rightSibling(TestEmp1);
 	TreeNode* TestEmp3 = test.rightSibling(TestEmp2);
+	//Next one should go null
 	TreeNode* nullboiintheory = test.rightSibling(TestEmp3);
+	//get size
 	int count = test.getSize();
+	//Try to find existing node
 	TreeNode* TestReturn2 = test.find("Test Employee 2");
+	//Try to find nonexistent node
 	TreeNode* TestReturnNull = test.find("Nothing");
+	//Fire existing non-root node
+	bool fired = test.fire("TopBoi");
+	//Fire root node (should return false)
+	fired = test.fire("BetterBoi");
+	//Fire nonexistent node
+	fired = test.fire("YabbaDabbaDoo");
 	return 0;
 }
 
