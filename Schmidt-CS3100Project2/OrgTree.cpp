@@ -97,39 +97,32 @@ using namespace std;
 
 	//Method to return the TreeNode with the given title.
 	//If the title is not found, returns null pointer
+	//Best case asymptotic run time of Theta(1) for tree of size n. (node is root)
+	//Worst case: Theta (n) (All nodes are children of parent or tree is linear, so must traverse through all other nodes to find)
 	TREENODEPTR OrgTree::find(string title) {
 		//Call preOrderFind and pass through the root and the title being searched for
 		return preOrderFind(root, title);
-
-		//return findNode;
 	}
 
 	//Method to traverse the tree and find a string (doing a preorder traversal recursively)
+	//Best case asymptotic run time of Theta(1) for tree of size n. (node is root)
+	//Worst case: Theta (n) (All nodes are children of parent or tree is linear, so must traverse through all other nodes to find)
 	TREENODEPTR OrgTree::preOrderFind(TREENODEPTR findNode, string title) {
-		/*TREENODEPTR findNode = new TreeNode;
-		findNode = root;*/
 		//If the current node has the matching title, return the node.
 		if (findNode->title == title) {
 			return findNode;
 		}
-		//If the node has a left child, recursively check it.
+		//If the node has a left child, recursively check it and return result.
 		if (findNode->leftmostChild != TREENULLPTR) {
 			findNode = findNode->leftmostChild;
 			return OrgTree::preOrderFind(findNode, title);
 		}
-		////Check if the current node has the matching title; if so, return it.
-		//if (findNode->title == title) {
-		//	return findNode;
-		//}
-		//If the node has a right sibling, recursively check it.
+		//If the node has a right sibling, recursively check it and return result.
 		if (findNode->rightSibling != TREENULLPTR && findNode->title != title) {
 			findNode = findNode->rightSibling;
 			return OrgTree::preOrderFind(findNode, title);
 		}
-		////Check if the current node has the matching title; if so, return it.
-		//if (findNode->title == title) {
-		//	return findNode;
-		//}
+		//If title not found, return null pointer
 		return TREENULLPTR;
 	}
 
@@ -176,6 +169,51 @@ using namespace std;
 
 	//Fire the employee whose title matches formerTitle and make all their employee's work directly for the fired employee's boss
 	//If no title match is found, return false.  If formerTitle matches root node, return false.
+	//Best case asymptotic run time of Theta(1) for tree of size n. (fire node is first child of parent and is a leaf)
+	//Worst case: Theta (n?) (n to find, but then it's last node, in which case 1 to move children.  or 1 to find and n to move children. or anything in between)
 	bool OrgTree::fire(string formerTitle) {
-		return false;
+		//Declare variables
+		TREENODEPTR fireNode = new TreeNode;
+		TREENODEPTR childNode = new TreeNode;
+		TREENODEPTR parentNode = new TreeNode;
+
+		//If formerTitle matches root node, return false.
+		if (root->title == formerTitle) {
+			return false;
+		}
+		//Find the node with the title formerTitle using the find function
+		fireNode = find(formerTitle);
+		//If the search returns the null pointer (aka no title found), return false
+		if (fireNode == TREENULLPTR) {
+			return false;
+		}
+		//Before deleting node, make parent pointer of all child nodes of fireNode point to fireNode's parent
+		//Check if fireNode has children
+		if (fireNode->leftmostChild != TREENULLPTR) {
+			//Set childNode to fireNode's left child
+			childNode = fireNode->leftmostChild;
+			parentNode = fireNode->parent;
+
+			//Set fireNode's parent's left child to be fireNode's left child
+			parentNode->leftmostChild = childNode;
+
+			//Loop until no more right siblings: set child's parent to fireNode's parent and move to next right sibling
+			while (childNode->rightSibling != TREENULLPTR) {
+				childNode->parent = fireNode->parent;
+				childNode = childNode->rightSibling;
+			}
+			//Set last child's parent to fireNode's parent
+			childNode->parent = fireNode->parent;
+		}
+
+		//Once all children have parent pointers to fireNode's pointer, delete fireNode
+		fireNode->leftmostChild = TREENULLPTR;
+		fireNode->name.clear();
+		fireNode->parent = TREENULLPTR;
+		fireNode->rightSibling = TREENULLPTR;
+		fireNode->title.clear();
+		fireNode = TREENULLPTR;
+
+		//Return true if firing complete
+		return true;
 	}

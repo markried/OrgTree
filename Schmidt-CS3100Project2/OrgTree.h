@@ -23,6 +23,8 @@ private:
 	int nodeCount;
 
 	//Method to traverse the tree and find a string (doing a preorder traversal recursively)
+	//Best case asymptotic run time of Theta(1) for tree of size n. (node is root)
+	//Worst case: Theta (n) (All nodes are children of parent or tree is linear, so must traverse through all other nodes to find)
 	TREENODEPTR preOrderFind(TREENODEPTR, string);
 public:
 	//Default OrgTree constructor
@@ -52,6 +54,8 @@ public:
 	void printSubTree(TREENODEPTR);
 
 	//Method to return the TreeNode with the given title.
+	//Best case asymptotic run time of Theta(1) for tree of size n. (node is root)
+	//Worst case: Theta (n) (All nodes are children of parent or tree is linear, so must traverse through all other nodes to find)
 	TREENODEPTR find(string);
 
 	//Method to create an org tree from a file with the given filename
