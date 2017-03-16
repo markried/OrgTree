@@ -57,6 +57,7 @@ using namespace std;
 	}
 
 	//Method to find the number of employees in the tree.
+	//Best and worst case asymptotic runtime of Theta(1) for a tree of size n.
 	unsigned int OrgTree::getSize() {
 		return nodeCount;
 	}
@@ -97,7 +98,39 @@ using namespace std;
 	//Method to return the TreeNode with the given title.
 	//If the title is not found, returns null pointer
 	TREENODEPTR OrgTree::find(string title) {
-		return false;
+		//Call preOrderFind and pass through the root and the title being searched for
+		return preOrderFind(root, title);
+
+		//return findNode;
+	}
+
+	//Method to traverse the tree and find a string (doing a preorder traversal recursively)
+	TREENODEPTR OrgTree::preOrderFind(TREENODEPTR findNode, string title) {
+		/*TREENODEPTR findNode = new TreeNode;
+		findNode = root;*/
+		//If the current node has the matching title, return the node.
+		if (findNode->title == title) {
+			return findNode;
+		}
+		//If the node has a left child, recursively check it.
+		if (findNode->leftmostChild != TREENULLPTR) {
+			findNode = findNode->leftmostChild;
+			return OrgTree::preOrderFind(findNode, title);
+		}
+		////Check if the current node has the matching title; if so, return it.
+		//if (findNode->title == title) {
+		//	return findNode;
+		//}
+		//If the node has a right sibling, recursively check it.
+		if (findNode->rightSibling != TREENULLPTR && findNode->title != title) {
+			findNode = findNode->rightSibling;
+			return OrgTree::preOrderFind(findNode, title);
+		}
+		////Check if the current node has the matching title; if so, return it.
+		//if (findNode->title == title) {
+		//	return findNode;
+		//}
+		return TREENULLPTR;
 	}
 
 	//Method to create an org tree from a file with the given filename
