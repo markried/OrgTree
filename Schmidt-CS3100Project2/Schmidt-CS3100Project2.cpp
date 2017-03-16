@@ -21,12 +21,13 @@ int main()
 	//Get children all over
 	TreeNode* newBoss = test.getRoot();
 	TreeNode* oldBoss = test.leftmostChild(newBoss);
-	TreeNode* oldBossLeftChild = test.leftmostChild(oldBoss);
-	TreeNode* LeftChildRightSib = test.rightSibling(oldBossLeftChild);
-	TreeNode* Ye = test.rightSibling(LeftChildRightSib);
-	TreeNode* nullboiintheory = test.rightSibling(Ye);
+	TreeNode* TestEmp1 = test.leftmostChild(oldBoss);
+	TreeNode* TestEmp2 = test.rightSibling(TestEmp1);
+	TreeNode* TestEmp3 = test.rightSibling(TestEmp2);
+	TreeNode* nullboiintheory = test.rightSibling(TestEmp3);
 	int count = test.getSize();
-	test.find("Test Employee 2");
+	TreeNode* TestReturn2 = test.find("Test Employee 2");
+	TreeNode* TestReturnNull = test.find("Nothing");
 	return 0;
 }
 
