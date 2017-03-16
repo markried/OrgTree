@@ -13,9 +13,9 @@ int main()
 	//Get root as node
 	TreeNode* Boss = test.getRoot();
 	//Hire
-	test.hire(Boss,"Test Employee 1","TestBoi");
-	test.hire(Boss, "Test Employee 2", "TestMan");
-	test.hire(Boss, "Test Employee 3", "TestDude");
+	test.hire(Boss,"Test Employee 1","TestOne");
+	test.hire(Boss, "Test Employee 2", "TestTwo");
+	test.hire(Boss, "Test Employee 3", "TestThree");
 	//New root
 	test.addRoot("BetterBoi", "Boiest");
 	//Get children all over
@@ -26,6 +26,7 @@ int main()
 	TreeNode* Ye = test.rightSibling(LeftChildRightSib);
 	TreeNode* nullboiintheory = test.rightSibling(Ye);
 	int count = test.getSize();
+	test.find("Test Employee 2");
 	return 0;
 }
 

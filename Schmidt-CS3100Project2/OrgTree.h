@@ -15,28 +15,37 @@ struct TreeNode {
 	TREENODEPTR rightSibling;
 };
 
+//For a tree of n employees, the space requirement is 3n pointers.
 class OrgTree {
 private:
 	//Declare variables
 	TREENODEPTR root;
 	int nodeCount;
+
+	//Method to traverse the tree and find a string (doing a preorder traversal recursively)
+	TREENODEPTR preOrderFind(TREENODEPTR, string);
 public:
 	//Default OrgTree constructor
 	OrgTree();
 
 	//Function to add root.
+	//Best and worst case asymptotic run time of Theta(1) for a tree of size n.
 	void addRoot(string, string);
 
 	//Method to find the number of employees in the tree.
+	//Best and worst case asymptotic runtime of Theta(1) for a tree of size n.
 	unsigned int getSize();
 
 	//Method to return a pointer to the root node.
+	//Best and worst case asymptotic runtime of Theta(1) for a tree of size n.
 	TREENODEPTR getRoot();
 
 	//Method to return a pointer to the leftmost child of the paramater node.
+	//Best and worst case asymptotic runtime of Theta(1) for a tree of size n.
 	TREENODEPTR leftmostChild(TREENODEPTR);
 
 	//Method to return a pointer to the right sibling of the parameter node
+	//Best and worst case asymptotic runtime of Theta(1) for a tree of size n.
 	TREENODEPTR rightSibling(TREENODEPTR);
 
 	//Method to print out the subtree starting at node.
@@ -53,6 +62,8 @@ public:
 
 	//Method to "hire an employee", aka add a node as the last child of the node given by parent
 	//with the title given by newTitle and the name given by newName.
+	//Best case asymptotic run time of Theta(1) for tree of size n. (new node is first child of parent)
+	//Worst case: Theta (n) (All nodes are children of parent, so must traverse through all right siblings to add as last child)
 	void hire(TREENODEPTR, string, string);
 
 	//Fire the employee whose title matches formerTitle and make all their employee's work directly for the fired employee's boss
