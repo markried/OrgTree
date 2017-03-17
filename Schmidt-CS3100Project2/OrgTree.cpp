@@ -181,7 +181,7 @@ using namespace std;
 	//Method to create an org tree from a file with the given filename
 	//If file is found and tree is created successfully, returns true
 	//Else returns false
-	//Worst case: Theta(n^2) (n entries in file, and if it's a flat tree, n steps to find last child of root)
+	//Worst case: Theta(n^2) (n entries in file, and if it's a flat tree, n steps to add rightmost child of root)
 	//Used given FileIO.cpp to understand how I/O should work, so any similarities are due to that.
 	bool OrgTree::read(string filename) {
 		//Declare variables
