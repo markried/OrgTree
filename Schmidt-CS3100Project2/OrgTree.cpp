@@ -206,6 +206,7 @@ using namespace std;
 				if (currentNode->parent != TREENULLPTR) {
 					//Set currentNode to be currentNode's parent (go up a step in the tree)
 					currentNode = currentNode->parent;
+					inFile.ignore(256, '\n');
 				}
 				//If currentNode's parent doesn't exist (aka current node is root)
 				else {

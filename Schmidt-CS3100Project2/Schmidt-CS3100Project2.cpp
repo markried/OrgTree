@@ -93,8 +93,8 @@ int RaymerTest() {
 	//o2.read("output.txt");
 	//o2.printSubTree(o2.getRoot()); //printSubTree from root
 
-	o3.read("inTest.txt");
-
+	o3.read("testIn.txt");
+	o3.printSubTree(o3.getRoot());
 	//system("PAUSE");
 	return 0;
 }
