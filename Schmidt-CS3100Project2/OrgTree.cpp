@@ -91,15 +91,16 @@ using namespace std;
 	}
 
 	//Method to print out the subtree starting at node.
+	//Best case runtime: Theta(1) (currentNode is a leaf)
+	//Worst case runtime: Theta(n) (currentNode is the root)
 	void OrgTree::printSubTree(TREENODEPTR subTreeRoot) {
 		//Call recursivePrintSubTree and pass through subTreeRoot and a starting depth of 0
 		recursivePrintSubTree(subTreeRoot, 0);
-
-
 	}
 
 	//Recursive method to print subtree and keep a count of how deep in the subtree the method is (to insert appropriate number of tabs)
-
+	//Best case runtime: Theta(1) (currentNode is a leaf)
+	//Worst case runtime: Theta(n) (currentNode is the root)
 	void OrgTree::recursivePrintSubTree(TREENODEPTR currentNode, int depth) {
 		//Declare variables
 		string tabs, nodeName, nodeTitle;
@@ -123,15 +124,12 @@ using namespace std;
 		}
 
 		//If current node has a right sibling, then run recursion on sibling
-
 		if (depth != 0 && currentNode->rightSibling != NULL) {
 			//WHen recursing to a sibling, depth does not change
 			recursivePrintSubTree(currentNode->rightSibling, depth);
 		}
 
 		return;
-
-
 	}
 
 	//Method to return the TreeNode with the given title.
@@ -155,24 +153,27 @@ using namespace std;
 		if (findNode->title == title) {
 			return findNode;
 		}
+
 		//If the node has a left child, recursively check it and return result.
 		if (findNode->leftmostChild != TREENULLPTR) {
 			//findNode = findNode->leftmostChild;
 			child = preOrderFind(findNode->leftmostChild, title);
-			//If the current node has the matching title, return the node.
+			//If the child node has the matching title, return the node.
 			if (child != TREENULLPTR && child->title == title) {
 				return child;
 			}
 		}
+
 		//If the node has a right sibling, recursively check it and return result.
 		if (findNode->rightSibling != TREENULLPTR && findNode->title != title) {
 			//findNode = findNode->rightSibling;
 			sibling = preOrderFind(findNode->rightSibling, title);
-			//If the current node has the matching title, return the node.
+			//If the sibling node has the matching title, return the node.
 			if (sibling != TREENULLPTR && sibling->title == title) {
 				return sibling;
 			}
 		}
+
 		//If title not found, return null pointer
 		return TREENULLPTR;
 	}
@@ -180,9 +181,91 @@ using namespace std;
 	//Method to create an org tree from a file with the given filename
 	//If file is found and tree is created successfully, returns true
 	//Else returns false
+	//Worst case: Theta(n^2) (n entries in file, and if it's a flat tree, n steps to find last child of root)
+	//Used given FileIO.cpp to understand how I/O should work, so any similarities are due to that.
 	bool OrgTree::read(string filename) {
+		//Declare variables
+		TREENODEPTR newNode = new TreeNode;
+		TREENODEPTR currentNode = new TreeNode;
+		TREENODEPTR leftSibling = new TreeNode;
+		string inTitle, inName;
 
-		return false;
+		//Create filestream
+		ifstream inFile(filename);
+		//Check if file cannot be opened
+		if (inFile.is_open() == false) {
+			//If file cannot be opened, return false.
+			return false;
+		}
+
+		//While end of file has not been reached
+		while (inFile.eof() == false) {
+			TREENODEPTR newNode = new TreeNode;
+			if (inFile.peek() == ')') {
+				//If current node isn't root
+				if (currentNode->parent != TREENULLPTR) {
+					//Set currentNode to be currentNode's parent (go up a step in the tree)
+					currentNode = currentNode->parent;
+				}
+				//If currentNode's parent doesn't exist (aka current node is root)
+				else {
+					//Return false
+					return false;
+				}
+
+			}
+			//If line isn't a close paren
+			else {
+				//Get title and name
+				getline(inFile, inTitle, ',');
+				getline(inFile, inName, '\n');
+
+				//Assign title and name to new node
+				newNode->title = inTitle;
+				newNode->name = inName;
+				
+				//Set new node's child and sibling pointers to null
+				newNode->leftmostChild = TREENULLPTR;
+				newNode->rightSibling = TREENULLPTR;
+				//Set new node's parent to null (it'll be set later if it's not root)
+				newNode->parent = TREENULLPTR;
+
+				//If root does not exist
+				if (root == TREENULLPTR) {
+					//Set new node to be root
+					root = newNode;
+					//Set root as parent node
+					currentNode = root;
+				}
+				//If root exists
+				else {
+					//Set new node's parent to be parent node
+					newNode->parent = currentNode;
+
+					//If parent node has no children
+					if (currentNode->leftmostChild == TREENULLPTR) {
+						currentNode->leftmostChild = newNode;
+					}
+					//If parent node has children
+					else {
+						//Set a node to find last child of parent
+						leftSibling = currentNode->leftmostChild;
+						//While search node's right sibling is not null
+						while (leftSibling->rightSibling != TREENULLPTR) {
+							//Set search node to be search node's right sibling
+							leftSibling = leftSibling->rightSibling;
+						}
+						//Once last child is found, set its right sibling to be the new node.
+						leftSibling->rightSibling = newNode;
+					}
+
+					//Set new node to be parent node (keep parent trailing)
+					currentNode = newNode;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	//Writes the org tree to a file with the given filename, using the same format as read
@@ -220,8 +303,8 @@ using namespace std;
 
 	//Fire the employee whose title matches formerTitle and make all their employee's work directly for the fired employee's boss
 	//If no title match is found, return false.  If formerTitle matches root node, return false.
-	//Best case asymptotic run time of Theta(1) for tree of size n. (fire node is first child of parent and is a leaf)
-	//Worst case: Theta(n) (n to find, and n to switch all children to parent (if fireNode is child of root and all other nodes are children of fireNode)
+	//Best case asymptotic run time of Theta(1) for tree of size n. (fire node is only child of parent and is a leaf)
+	//Worst case: Theta(n) (Theta(n) to find plus Theta(n) to repoint everything around fireNode)
 	bool OrgTree::fire(string formerTitle) {
 		//Declare variables
 		TREENODEPTR fireNode = new TreeNode;
@@ -240,7 +323,7 @@ using namespace std;
 			return false;
 		}
 
-		//Set parentNOde = fireNode's parent
+		//Set parentNode = fireNode's parent
 		parentNode = fireNode->parent;
 
 		//Before deleting node, make parent pointer of all child nodes of fireNode point to fireNode's parent
@@ -249,12 +332,13 @@ using namespace std;
 			//Set childNode to fireNode's left child
 			childNode = fireNode->leftmostChild;
 
-			//If parent node's left child is fireNode, set childNode's right sibling to be fireNode's right sibling
+			//If parent node's left child is fireNode, set parent node's new left child to be fireNode's left child
 			if (parentNode->leftmostChild == fireNode) {
 				parentNode->leftmostChild = childNode;
 			}
 			//If parent node's left child is not fireNode, find fireNode's left sibling and make its right sibling childNode
 			else {
+				//Set pointer to parent node's left child
 				firesLeftSibling = parentNode->leftmostChild;
 				//Find firenode's left sibling
 				while (firesLeftSibling->rightSibling != fireNode) {
@@ -264,37 +348,39 @@ using namespace std;
 				firesLeftSibling->rightSibling = childNode;
 			}
 
-
-			//Loop until no more right siblings: set child's parent to fireNode's parent and move to next right sibling
+			//Loop through all of fireNode's children and make them children of fireNode's parent
 			while (childNode->rightSibling != TREENULLPTR) {
 				childNode->parent = fireNode->parent;
 				childNode = childNode->rightSibling;
 			}
+
 			//Set last child's parent to fireNode's parent
 			childNode->parent = fireNode->parent;
 			//Set last child's right sibling to be fireNode's right sibling
 			childNode->rightSibling = fireNode->rightSibling;
 		}
+
 		//If fireNode has no children
 		else {
 			//If fireNode is parent's leftmost child
 			if (parentNode->leftmostChild == fireNode) {
-				//Make fireNode's right sibling parentNode's left child
+				//Make fireNode's right sibling be parentNode's left child
 				parentNode->leftmostChild = fireNode->rightSibling;
 			}
+
 			//If parent node's left child is not fireNode, find fireNode's left sibling and make its right sibling childNode
 			else {
+				//Pointer to parent's left child
 				firesLeftSibling = parentNode->leftmostChild;
 				//Find fireNode's left sibling
 				while (firesLeftSibling->rightSibling != fireNode) {
 					firesLeftSibling = firesLeftSibling->rightSibling;
 				}
-				//Make fireNode's left sibling's right sibling equal fireNode's right sibling
+				//Make fireNode's left sibling's right sibling equal fireNode's right sibling (skip over fireNode)
 				firesLeftSibling->rightSibling = fireNode->rightSibling;
 			}
-
 		}
-		//Once all children have parent pointers to fireNode's pointer, delete fireNode
+		//Once nothing points to or from fireNode anymore, delete fireNode
 		fireNode->leftmostChild = TREENULLPTR;
 		fireNode->name.clear();
 		fireNode->parent = TREENULLPTR;

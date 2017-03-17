@@ -62,7 +62,7 @@ int main()
 }
 
 int RaymerTest() {
-	OrgTree o1, o2;
+	OrgTree o1, o2, o3;
 
 	// Adding roots should make a linear tree
 	o1.addRoot("R1", "R1");
@@ -92,6 +92,8 @@ int RaymerTest() {
 	//o1.write("output.txt");
 	//o2.read("output.txt");
 	//o2.printSubTree(o2.getRoot()); //printSubTree from root
+
+	o3.read("inTest.txt");
 
 	//system("PAUSE");
 	return 0;
