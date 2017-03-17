@@ -1,3 +1,4 @@
+//IMPLEMENTATION: BINARYIZED TREE
 #pragma once
 #define TREENODEPTR TreeNode*
 #define TREENULLPTR NULL
@@ -7,7 +8,10 @@
 #include <string>
 
 using namespace std;
+
+//TreeNode struct
 struct TreeNode {
+	//Each node contains a title and name, as well as pointers to parent, left child, and right sibling
 	string title;
 	string name;
 	TREENODEPTR parent;
@@ -17,7 +21,10 @@ struct TreeNode {
 
 //For a tree of n employees, the space requirement is 3n pointers.
 class OrgTree {
+
 private:
+
+
 	//Declare variables
 	TREENODEPTR root;
 	int nodeCount;
@@ -27,6 +34,7 @@ private:
 	//Worst case: Theta (n) (All nodes are children of parent or tree is linear, so must traverse through all other nodes to find)
 	TREENODEPTR preOrderFind(TREENODEPTR, string);
 public:
+	
 	//Default OrgTree constructor
 	OrgTree();
 
@@ -72,5 +80,7 @@ public:
 
 	//Fire the employee whose title matches formerTitle and make all their employee's work directly for the fired employee's boss
 	//If no title match is found, return false.  If formerTitle matches root node, return false.
+	//Best case asymptotic run time of Theta(1) for tree of size n. (fire node is first child of parent and is a leaf)
+	//Worst case: Theta(n) (n to find, and n to switch all children to parent (if fireNode is child of root and all other nodes are children of fireNode)
 	bool fire(string);
 };

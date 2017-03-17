@@ -92,8 +92,12 @@ using namespace std;
 
 	//Method to print out the subtree starting at node.
 	void OrgTree::printSubTree(TREENODEPTR subTreeRoot) {
+		//Recursively go through 
+
 
 	}
+
+	//void 
 
 	//Method to return the TreeNode with the given title.
 	//If the title is not found, returns null pointer
@@ -170,7 +174,7 @@ using namespace std;
 	//Fire the employee whose title matches formerTitle and make all their employee's work directly for the fired employee's boss
 	//If no title match is found, return false.  If formerTitle matches root node, return false.
 	//Best case asymptotic run time of Theta(1) for tree of size n. (fire node is first child of parent and is a leaf)
-	//Worst case: Theta (n?) (n to find, but then it's last node, in which case 1 to move children.  or 1 to find and n to move children. or anything in between)
+	//Worst case: Theta(n) (n to find, and n to switch all children to parent (if fireNode is child of root and all other nodes are children of fireNode)
 	bool OrgTree::fire(string formerTitle) {
 		//Declare variables
 		TREENODEPTR fireNode = new TreeNode;
@@ -212,7 +216,7 @@ using namespace std;
 		fireNode->parent = TREENULLPTR;
 		fireNode->rightSibling = TREENULLPTR;
 		fireNode->title.clear();
-		fireNode = TREENULLPTR;
+		delete fireNode;
 
 		//Return true if firing complete
 		return true;
