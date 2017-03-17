@@ -92,12 +92,47 @@ using namespace std;
 
 	//Method to print out the subtree starting at node.
 	void OrgTree::printSubTree(TREENODEPTR subTreeRoot) {
-		//Recursively go through 
+		//Call recursivePrintSubTree and pass through subTreeRoot and a starting depth of 0
+		recursivePrintSubTree(subTreeRoot, 0);
 
 
 	}
 
-	//void 
+	//Recursive method to print subtree and keep a count of how deep in the subtree the method is (to insert appropriate number of tabs)
+
+	void OrgTree::recursivePrintSubTree(TREENODEPTR currentNode, int depth) {
+		//Declare variables
+		string tabs, nodeName, nodeTitle;
+
+		//Get appropriate number of tabs to add at beginning of output string
+		for (int i = 0; i < depth; i++) {
+			tabs.append("\t");
+		}
+		
+		//Get title and name from current node
+		nodeTitle = currentNode->title;
+		nodeName = currentNode->name;
+
+		//Output current node's title and name
+		cout << tabs << nodeTitle << ": " << nodeName << endl;
+
+		//If current node has a leftmost child, then run recursion on child
+		if (currentNode->leftmostChild != TREENULLPTR) {
+			//When recursing deeper, increase depth
+			recursivePrintSubTree(currentNode->leftmostChild, depth + 1);
+		}
+
+		//If current node has a right sibling, then run recursion on sibling
+
+		if (depth != 0 && currentNode->rightSibling != NULL) {
+			//WHen recursing to a sibling, depth does not change
+			recursivePrintSubTree(currentNode->rightSibling, depth);
+		}
+
+		return;
+
+
+	}
 
 	//Method to return the TreeNode with the given title.
 	//If the title is not found, returns null pointer
@@ -112,19 +147,31 @@ using namespace std;
 	//Best case asymptotic run time of Theta(1) for tree of size n. (node is root)
 	//Worst case: Theta (n) (All nodes are children of parent or tree is linear, so must traverse through all other nodes to find)
 	TREENODEPTR OrgTree::preOrderFind(TREENODEPTR findNode, string title) {
+		//Declare variables
+		TreeNode* child;
+		TreeNode* sibling;
+
 		//If the current node has the matching title, return the node.
 		if (findNode->title == title) {
 			return findNode;
 		}
 		//If the node has a left child, recursively check it and return result.
 		if (findNode->leftmostChild != TREENULLPTR) {
-			findNode = findNode->leftmostChild;
-			return OrgTree::preOrderFind(findNode, title);
+			//findNode = findNode->leftmostChild;
+			child = preOrderFind(findNode->leftmostChild, title);
+			//If the current node has the matching title, return the node.
+			if (child != TREENULLPTR && child->title == title) {
+				return child;
+			}
 		}
 		//If the node has a right sibling, recursively check it and return result.
 		if (findNode->rightSibling != TREENULLPTR && findNode->title != title) {
-			findNode = findNode->rightSibling;
-			return OrgTree::preOrderFind(findNode, title);
+			//findNode = findNode->rightSibling;
+			sibling = preOrderFind(findNode->rightSibling, title);
+			//If the current node has the matching title, return the node.
+			if (sibling != TREENULLPTR && sibling->title == title) {
+				return sibling;
+			}
 		}
 		//If title not found, return null pointer
 		return TREENULLPTR;
@@ -180,6 +227,7 @@ using namespace std;
 		TREENODEPTR fireNode = new TreeNode;
 		TREENODEPTR childNode = new TreeNode;
 		TREENODEPTR parentNode = new TreeNode;
+		TREENODEPTR firesLeftSibling = new TreeNode;
 
 		//If formerTitle matches root node, return false.
 		if (root->title == formerTitle) {
@@ -191,15 +239,31 @@ using namespace std;
 		if (fireNode == TREENULLPTR) {
 			return false;
 		}
+
+		//Set parentNOde = fireNode's parent
+		parentNode = fireNode->parent;
+
 		//Before deleting node, make parent pointer of all child nodes of fireNode point to fireNode's parent
 		//Check if fireNode has children
 		if (fireNode->leftmostChild != TREENULLPTR) {
 			//Set childNode to fireNode's left child
 			childNode = fireNode->leftmostChild;
-			parentNode = fireNode->parent;
 
-			//Set fireNode's parent's left child to be fireNode's left child
-			parentNode->leftmostChild = childNode;
+			//If parent node's left child is fireNode, set childNode's right sibling to be fireNode's right sibling
+			if (parentNode->leftmostChild == fireNode) {
+				parentNode->leftmostChild = childNode;
+			}
+			//If parent node's left child is not fireNode, find fireNode's left sibling and make its right sibling childNode
+			else {
+				firesLeftSibling = parentNode->leftmostChild;
+				//Find firenode's left sibling
+				while (firesLeftSibling->rightSibling != fireNode) {
+					firesLeftSibling = firesLeftSibling->rightSibling;
+				}
+				//Make fireNode's left sibling's right sibling the first childNode
+				firesLeftSibling->rightSibling = childNode;
+			}
+
 
 			//Loop until no more right siblings: set child's parent to fireNode's parent and move to next right sibling
 			while (childNode->rightSibling != TREENULLPTR) {
@@ -208,8 +272,28 @@ using namespace std;
 			}
 			//Set last child's parent to fireNode's parent
 			childNode->parent = fireNode->parent;
+			//Set last child's right sibling to be fireNode's right sibling
+			childNode->rightSibling = fireNode->rightSibling;
 		}
+		//If fireNode has no children
+		else {
+			//If fireNode is parent's leftmost child
+			if (parentNode->leftmostChild == fireNode) {
+				//Make fireNode's right sibling parentNode's left child
+				parentNode->leftmostChild = fireNode->rightSibling;
+			}
+			//If parent node's left child is not fireNode, find fireNode's left sibling and make its right sibling childNode
+			else {
+				firesLeftSibling = parentNode->leftmostChild;
+				//Find fireNode's left sibling
+				while (firesLeftSibling->rightSibling != fireNode) {
+					firesLeftSibling = firesLeftSibling->rightSibling;
+				}
+				//Make fireNode's left sibling's right sibling equal fireNode's right sibling
+				firesLeftSibling->rightSibling = fireNode->rightSibling;
+			}
 
+		}
 		//Once all children have parent pointers to fireNode's pointer, delete fireNode
 		fireNode->leftmostChild = TREENULLPTR;
 		fireNode->name.clear();

@@ -29,10 +29,15 @@ private:
 	TREENODEPTR root;
 	int nodeCount;
 
-	//Method to traverse the tree and find a string (doing a preorder traversal recursively)
+	//Recursive method to traverse the tree and find a string (doing a preorder traversal recursively)
 	//Best case asymptotic run time of Theta(1) for tree of size n. (node is root)
 	//Worst case: Theta (n) (All nodes are children of parent or tree is linear, so must traverse through all other nodes to find)
 	TREENODEPTR preOrderFind(TREENODEPTR, string);
+
+	//Recursive method to print subtree and keep a count of how deep in the subtree the method is (to insert appropriate number of tabs)
+
+	void recursivePrintSubTree(TREENODEPTR, int);
+
 public:
 	
 	//Default OrgTree constructor
