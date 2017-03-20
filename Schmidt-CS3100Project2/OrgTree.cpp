@@ -156,7 +156,6 @@ using namespace std;
 
 		//If the node has a left child, recursively check it and return result.
 		if (findNode->leftmostChild != TREENULLPTR) {
-			//findNode = findNode->leftmostChild;
 			child = preOrderFind(findNode->leftmostChild, title);
 			//If the child node has the matching title, return the node.
 			if (child != TREENULLPTR && child->title == title) {
@@ -166,7 +165,6 @@ using namespace std;
 
 		//If the node has a right sibling, recursively check it and return result.
 		if (findNode->rightSibling != TREENULLPTR && findNode->title != title) {
-			//findNode = findNode->rightSibling;
 			sibling = preOrderFind(findNode->rightSibling, title);
 			//If the sibling node has the matching title, return the node.
 			if (sibling != TREENULLPTR && sibling->title == title) {
@@ -181,7 +179,8 @@ using namespace std;
 	//Method to create an org tree from a file with the given filename
 	//If file is found and tree is created successfully, returns true
 	//Else returns false
-	//Worst case: Theta(n^2) (n entries in file, and if it's a flat tree, n steps to add rightmost child of root)
+	//Best case: Theta(n) (n entries in file to process, but if it's a linear tree, only need to go down and back up)
+	//Worst case: Theta(n^2) (n entries in file to process, and if it's a flat tree, n steps to add rightmost child of root)
 	//Used given FileIO.cpp to understand how I/O should work, so any similarities are due to that.
 	bool OrgTree::read(string filename) {
 		//Declare variables
@@ -201,19 +200,15 @@ using namespace std;
 		//While end of file has not been reached
 		while (inFile.eof() == false) {
 			TREENODEPTR newNode = new TreeNode;
+			//If current node is null (improperly formatted text file), then return false.
+			if (currentNode == TREENULLPTR) {
+				return false;
+			}
+			//If current line is a close paren
 			if (inFile.peek() == ')') {
-				//If current node isn't root
-				if (currentNode->parent != TREENULLPTR) {
-					//Set currentNode to be currentNode's parent (go up a step in the tree)
-					currentNode = currentNode->parent;
-					inFile.ignore(256, '\n');
-				}
-				//If currentNode's parent doesn't exist (aka current node is root)
-				else {
-					//Return false
-					return false;
-				}
-
+				//Set currentNode to be currentNode's parent (go up a step in the tree)
+				currentNode = currentNode->parent;
+				inFile.ignore(256, '\n');
 			}
 			//If line isn't a close paren
 			else {
@@ -271,7 +266,43 @@ using namespace std;
 
 	//Writes the org tree to a file with the given filename, using the same format as read
 	void OrgTree::write(string filename) {
+		//Create out stream
+		ofstream outFile(filename);
+		//Call recursiveWrite with the root node and filename
+		
+		recursiveWrite(root, outFile);
+	}
 
+	//RecursiveWrite
+	void OrgTree::recursiveWrite(TREENODEPTR currentNode, ofstream& outFile) {
+		//Declare variables
+
+		//Create output file stream
+
+		//Output current node
+		outFile << currentNode->title << ", " << currentNode->name << endl;
+
+		//If the node has a left child, recursively output it and check for relationships.
+		if (currentNode->leftmostChild != TREENULLPTR) {
+			//Go to the leftChild of the node
+			recursiveWrite(currentNode->leftmostChild, outFile);
+		}
+
+		//Output closed paren to signify end of subtree when no more left children
+		outFile << ")";
+		if (currentNode != root) {
+			outFile << endl;
+		}
+
+		//If the node has a right sibling, recursively output it and check for relationships.
+		if (currentNode->rightSibling != TREENULLPTR) {
+			//Go to the rightSibling of the node
+			recursiveWrite(currentNode->rightSibling, outFile);
+		}
+
+		//outFile << ")" << endl;
+
+		return;
 	}
 
 	//Method to "hire an employee", aka add a node as the last child of the node given by parent

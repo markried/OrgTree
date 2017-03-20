@@ -35,8 +35,12 @@ private:
 	TREENODEPTR preOrderFind(TREENODEPTR, string);
 
 	//Recursive method to print subtree and keep a count of how deep in the subtree the method is (to insert appropriate number of tabs)
-
+	//Best case runtime: Theta(1) (currentNode is a leaf)
+	//Worst case runtime: Theta(n) (currentNode is the root)
 	void recursivePrintSubTree(TREENODEPTR, int);
+
+
+	void recursiveWrite(TREENODEPTR, ofstream&);
 
 public:
 	
@@ -64,6 +68,8 @@ public:
 	TREENODEPTR rightSibling(TREENODEPTR);
 
 	//Method to print out the subtree starting at node.
+	//Best case runtime: Theta(1) (currentNode is a leaf)
+	//Worst case runtime: Theta(n) (currentNode is the root)
 	void printSubTree(TREENODEPTR);
 
 	//Method to return the TreeNode with the given title.
@@ -72,6 +78,8 @@ public:
 	TREENODEPTR find(string);
 
 	//Method to create an org tree from a file with the given filename
+	//Best case: Theta(n) (n entries in file to process, but if it's a linear tree, only need to go down and back up)
+	//Worst case: Theta(n^2) (n entries in file to process, and if it's a flat tree, n steps to add rightmost child of root)
 	bool read(string);
 
 	//Writes the org tree to a file with the given filename, using the same format as read

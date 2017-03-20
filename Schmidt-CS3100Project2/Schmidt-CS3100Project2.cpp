@@ -62,7 +62,7 @@ int main()
 }
 
 int RaymerTest() {
-	OrgTree o1, o2, o3;
+	OrgTree o1, o2, o3, o4;
 
 	// Adding roots should make a linear tree
 	o1.addRoot("R1", "R1");
@@ -77,8 +77,8 @@ int RaymerTest() {
 	o1.hire(o1.getRoot(), "R3C2", "R3C2");
 
 	o1.printSubTree(o1.getRoot());
-//o1.hire(o1.find("R3C1"), "R3C1C1", "R3C1C1");//test find on leaf node and hire to it
-//	o1.hire(o1.find("R3C1"), "R3C1C2", "R3C1C2");//test find on leaf node and hire to it
+	o1.hire(o1.find("R3C1"), "R3C1C1", "R3C1C1");//test find on leaf node and hire to it
+	o1.hire(o1.find("R3C1"), "R3C1C2", "R3C1C2");//test find on leaf node and hire to it
 
 	cout << o1.getSize() << endl;
 	o1.printSubTree(o1.getRoot()); //printSubTree from root
@@ -89,12 +89,17 @@ int RaymerTest() {
 	o1.printSubTree(o1.getRoot());
 
 	//// Write out a tree and read it back in to a new tree, then print
-	//o1.write("output.txt");
-	//o2.read("output.txt");
-	//o2.printSubTree(o2.getRoot()); //printSubTree from root
+	o1.write("output1.txt");
+	bool o2test = o2.read("output1.txt");
+	o2.printSubTree(o2.getRoot()); //printSubTree from root
 
-	o3.read("testIn.txt");
+	bool testNotThere = o3.read("testInt.txt");
+
+	bool testRight = o3.read("testIn.txt");
 	o3.printSubTree(o3.getRoot());
+	o3.write("output.txt");
+
+	bool testBad = o4.read("testBad.txt");
 	//system("PAUSE");
 	return 0;
 }
