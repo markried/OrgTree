@@ -6,6 +6,7 @@
 #include <string>
 
 using namespace std;
+//For a tree of n employees, the space requirement is 3n pointers.
 
 	//Declare variables
 	TREENODEPTR root;
@@ -59,12 +60,14 @@ using namespace std;
 	//Method to find the number of employees in the tree.
 	//Best and worst case asymptotic runtime of Theta(1) for a tree of size n.
 	unsigned int OrgTree::getSize() {
+		//Return count of nodes in the tree
 		return nodeCount;
 	}
 
 	//Method to return a pointer to the root node.
 	//Best and worst case asymptotic run time of Theta(1) for a tree of size n.
 	TREENODEPTR OrgTree::getRoot() {
+		//Return root pointer
 		return root;
 	}
 
@@ -72,9 +75,11 @@ using namespace std;
 	//If the node has no children, returns null pointer.
 	//Best and worst case asymptotic run time of Theta(1) for a tree of size n.
 	TREENODEPTR OrgTree::leftmostChild(TREENODEPTR node) {
+		//If node has no children, return null pointer
 		if (node->leftmostChild == TREENULLPTR) {
 			return TREENULLPTR;
 		}
+		//Otherwise, return leftmost child's pointer
 		TREENODEPTR leftChild = node->leftmostChild;
 		return leftChild;
 	}
@@ -83,9 +88,11 @@ using namespace std;
 	//If the node has no right sibling, returns null pointer
 	//Best and worst case asymptotic run time of Theta(1) for a tree of size n.
 	TREENODEPTR OrgTree::rightSibling(TREENODEPTR node) {
+		//If node has no right siblings, return null pointer
 		if (node->rightSibling == TREENULLPTR) {
 			return TREENULLPTR;
 		}
+		//Otherwise, return right sibling's pointer
 		TREENODEPTR rightSibling = node->rightSibling;
 		return rightSibling;
 	}
@@ -124,7 +131,7 @@ using namespace std;
 		}
 
 		//If current node has a right sibling, then run recursion on sibling
-		if (depth != 0 && currentNode->rightSibling != NULL) {
+		if (depth != 0 && currentNode->rightSibling != TREENULLPTR) {
 			//WHen recursing to a sibling, depth does not change
 			recursivePrintSubTree(currentNode->rightSibling, depth);
 		}
@@ -146,8 +153,8 @@ using namespace std;
 	//Worst case: Theta (n) (All nodes are children of parent or tree is linear, so must traverse through all other nodes to find)
 	TREENODEPTR OrgTree::preOrderFind(TREENODEPTR findNode, string title) {
 		//Declare variables
-		TreeNode* child;
-		TreeNode* sibling;
+		TREENODEPTR child;
+		TREENODEPTR sibling;
 
 		//If the current node has the matching title, return the node.
 		if (findNode->title == title) {
@@ -265,20 +272,18 @@ using namespace std;
 	}
 
 	//Writes the org tree to a file with the given filename, using the same format as read
+	//Best and worst case scenario: Theta(n) (must traverse every node to write it)
 	void OrgTree::write(string filename) {
-		//Create out stream
+		//Create output file stream
 		ofstream outFile(filename);
 		//Call recursiveWrite with the root node and filename
 		
 		recursiveWrite(root, outFile);
 	}
 
-	//RecursiveWrite
+	//Function to recursively write each line to output file
+	//Best and worst case scenario: Theta(n) (must traverse every node to write it)
 	void OrgTree::recursiveWrite(TREENODEPTR currentNode, ofstream& outFile) {
-		//Declare variables
-
-		//Create output file stream
-
 		//Output current node
 		outFile << currentNode->title << ", " << currentNode->name << endl;
 
@@ -290,6 +295,8 @@ using namespace std;
 
 		//Output closed paren to signify end of subtree when no more left children
 		outFile << ")";
+		//If current node is not root, append new line to the file.
+		//Doing this because if endline is appended after the root, there's an extra (blank) line in the file, which bugs things.
 		if (currentNode != root) {
 			outFile << endl;
 		}
@@ -300,15 +307,13 @@ using namespace std;
 			recursiveWrite(currentNode->rightSibling, outFile);
 		}
 
-		//outFile << ")" << endl;
-
 		return;
 	}
 
 	//Method to "hire an employee", aka add a node as the last child of the node given by parent
 	//with the title given by newTitle and the name given by newName.
 	//Best case asymptotic run time of Theta(1) for tree of size n. (new node is first child of parent)
-	//Worst case: Theta (n) (All nodes are children of parent, so must traverse through all right siblings to add as last child)
+	//Worst case: Theta (n) (For a flat tree, must traverse through all children of parent to add as last child)
 	void OrgTree::hire(TREENODEPTR parent, string newTitle, string newName) {
 		//Create new node
 		TREENODEPTR newNode = new TreeNode;
@@ -321,14 +326,19 @@ using namespace std;
 		//Set leftmost child and right sibling to null
 		newNode->leftmostChild = TREENULLPTR;
 		newNode->rightSibling = TREENULLPTR;
+		//If parent of new node has no children, make this its leftmost child
 		if (parent->leftmostChild == TREENULLPTR) {
 			parent->leftmostChild = newNode;
 		}
+		//If parent of new node has children, make this its last child
 		else {
+			//Set child node to be parent's left child
 			TREENODEPTR child = parent->leftmostChild;
+			//Cycle through children of the parent to find the last child 
 			while (child->rightSibling != TREENULLPTR) {
 				child = child->rightSibling;
 			}
+			//Add new node as right sibling of parent's last child
 			child->rightSibling = newNode;
 		}
 	}
@@ -420,6 +430,8 @@ using namespace std;
 		fireNode->title.clear();
 		delete fireNode;
 
+		//Subtract one from nodeCount to keep count accurate
+		nodeCount--;
 		//Return true if firing complete
 		return true;
 	}

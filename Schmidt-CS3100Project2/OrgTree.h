@@ -24,7 +24,6 @@ class OrgTree {
 
 private:
 
-
 	//Declare variables
 	TREENODEPTR root;
 	int nodeCount;
@@ -39,7 +38,7 @@ private:
 	//Worst case runtime: Theta(n) (currentNode is the root)
 	void recursivePrintSubTree(TREENODEPTR, int);
 
-
+	//Best and worst case scenario: Theta(n) (must traverse every node to write it)
 	void recursiveWrite(TREENODEPTR, ofstream&);
 
 public:
@@ -83,6 +82,7 @@ public:
 	bool read(string);
 
 	//Writes the org tree to a file with the given filename, using the same format as read
+	//Best and worst case scenario: Theta(n) (must traverse every node to write it)
 	void write(string);
 
 	//Method to "hire an employee", aka add a node as the last child of the node given by parent
