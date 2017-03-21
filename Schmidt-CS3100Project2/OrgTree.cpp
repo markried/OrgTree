@@ -8,10 +8,6 @@
 using namespace std;
 //For a tree of n employees, the space requirement is 3n pointers.
 
-	//Declare variables
-	TREENODEPTR root;
-	int nodeCount;
-
 	//Default OrgTree constructor
 	OrgTree::OrgTree() {
 		//Set node count to 0
@@ -266,6 +262,10 @@ using namespace std;
 					currentNode = newNode;
 				}
 			}
+		}
+		
+		if (currentNode != root) {
+			return false;
 		}
 
 		return true;
