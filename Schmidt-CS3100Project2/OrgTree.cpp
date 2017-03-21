@@ -97,8 +97,10 @@ using namespace std;
 	//Best case runtime: Theta(1) (currentNode is a leaf)
 	//Worst case runtime: Theta(n) (currentNode is the root)
 	void OrgTree::printSubTree(TREENODEPTR subTreeRoot) {
-		//Call recursivePrintSubTree and pass through subTreeRoot and a starting depth of 0
-		recursivePrintSubTree(subTreeRoot, 0);
+		//Call recursivePrintSubTree and pass through subTreeRoot and a starting depth of 0 (if subTreeRoot isn't null)
+		if (subTreeRoot != TREENULLPTR) {
+			recursivePrintSubTree(subTreeRoot, 0);
+		}
 	}
 
 	//Recursive method to print subtree and keep a count of how deep in the subtree the method is (to insert appropriate number of tabs)
