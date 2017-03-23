@@ -190,7 +190,7 @@ using namespace std;
 	bool OrgTree::read(string filename) {
 		//Declare variables
 		TREENODEPTR currentNode = new TreeNode;
-		TREENODEPTR newNode = new TreeNode;
+		std::vector<TREENODEPTR> newNodes;
 		TREENODEPTR leftSibling;
 		string inTitle, inName;
 
@@ -205,6 +205,7 @@ using namespace std;
 
 		//While end of file has not been reached
 		while (inFile.eof() == false) {
+			newNodes.emplace_back(new TreeNode);
 			//If current node is null (too many end parens), then return false.
 			if (currentNode == TREENULLPTR) {
 				delete currentNode;
@@ -219,11 +220,11 @@ using namespace std;
 			//If line isn't a close paren
 			else {
 				//Set all of newNode's data and pointers to null (clear newNode)
-				newNode->leftmostChild = TREENULLPTR;
-				newNode->rightSibling = TREENULLPTR;
-				newNode->parent = TREENULLPTR;
-				newNode->name.clear();
-				newNode->title.clear();
+				newNodes.back()->leftmostChild = TREENULLPTR;
+				newNodes.back()->rightSibling = TREENULLPTR;
+				newNodes.back()->parent = TREENULLPTR;
+				newNodes.back()->name.clear();
+				newNodes.back()->title.clear();
 
 				//Get title and name
 				getline(inFile, inTitle, ',');
@@ -234,13 +235,13 @@ using namespace std;
 					inName = inName.substr(1);
 				}
 				//Assign title and name to new node
-				newNode->title = inTitle;
-				newNode->name = inName;
+				newNodes.back()->title = inTitle;
+				newNodes.back()->name = inName;
 
 				//If root does not exist
 				if (root == TREENULLPTR) {
 					//Set new node to be root
-					root = newNode;
+					root = newNodes.back();
 					//Set root as parent node
 					currentNode = root;
 
@@ -250,11 +251,11 @@ using namespace std;
 				//If root exists
 				else {
 					//Set new node's parent to be parent node
-					newNode->parent = currentNode;
+					newNodes.back()->parent = currentNode;
 
 					//If parent node has no children
 					if (currentNode->leftmostChild == TREENULLPTR) {
-						currentNode->leftmostChild = newNode;
+						currentNode->leftmostChild = newNodes.back();
 					}
 					//If parent node has children
 					else {
@@ -266,11 +267,11 @@ using namespace std;
 							leftSibling = leftSibling->rightSibling;
 						}
 						//Once last child is found, set its right sibling to be the new node.
-						leftSibling->rightSibling = newNode;
+						leftSibling->rightSibling = newNodes.back();
 					}
 
 					//Set new node to be parent node (keep parent trailing)
-					currentNode = newNode;
+					currentNode = newNodes.back();
 
 					//Increase number of nodes by 1
 					nodeCount++;
@@ -284,6 +285,7 @@ using namespace std;
 		}
 
 		delete currentNode;
+		newNodes.clear();
 		return true;
 	}
 

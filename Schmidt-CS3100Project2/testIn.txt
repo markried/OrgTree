@@ -1,5 +1,5 @@
 President, George Orwell
-VP Sales, Mark Zuckerberg
+VP Sales,Mark Zuckerberg
 Director of Marketing, George Lucas
 Digital Media Specialist, Al Gore
 )

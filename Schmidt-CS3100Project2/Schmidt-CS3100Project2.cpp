@@ -6,6 +6,8 @@
 
 int RaymerTest();
 
+void memLeakTest();
+
 int main()
 {
 	cout << "TEST\tTEST" << endl;
@@ -56,13 +58,18 @@ int main()
 	test.printSubTree(newBoss);
 
 	int x = RaymerTest();
+	
+	for (int i = 0; i < 10000; i++) {
+		memLeakTest();
+	}
+	
 
 	system("PAUSE");
 	return 0;
 }
 
 int RaymerTest() {
-	OrgTree o1, o2, o3, o4;
+	OrgTree o1, o2, o3, o4, o5, o6, o7;
 
 	// Adding roots should make a linear tree
 	o1.addRoot("R1", "R1");
@@ -98,8 +105,17 @@ int RaymerTest() {
 	bool testRight = o3.read("testIn.txt");
 	o3.printSubTree(o3.getRoot());
 	o3.write("output.txt");
+	cout << o3.getSize() << endl;
 
-	bool testBad = o4.read("testBad.txt");
+	bool testBadExtraParenEnd = o4.read("testBadExtraParenEnd.txt");
+	bool testBadExtraParenMid = o5.read("testBadExtraParenMid.txt");
+	bool testBadNotEnoughParensEnd = o6.read("testBadNotEnoughParensEnd.txt");
+	bool testBadNotEnoughParensMid = o7.read("testBadNotEnoughParensMid.txt");
 	//system("PAUSE");
 	return 0;
+}
+
+void memLeakTest() {
+	OrgTree testO;
+	testO.read("testIn.txt");
 }

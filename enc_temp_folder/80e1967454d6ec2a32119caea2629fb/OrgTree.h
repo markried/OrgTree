@@ -17,6 +17,11 @@ struct TreeNode {
 	TREENODEPTR parent;
 	TREENODEPTR leftmostChild;
 	TREENODEPTR rightSibling;
+	~TreeNode() {
+		delete parent;
+		delete leftmostChild;
+		delete rightSibling;
+	}
 };
 
 //For a tree of n employees, the space requirement is 3n pointers.

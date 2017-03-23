@@ -17,7 +17,6 @@ Software Engineer I, Donald Knuth
 )
 Software Engineer II, Marvin Minsky
 )
-)
 Cloud Development, Bob Ross
 )
 )
