@@ -190,7 +190,6 @@ using namespace std;
 	bool OrgTree::read(string filename) {
 		//Declare variables
 		TREENODEPTR currentNode = new TreeNode;
-		TREENODEPTR newNode = new TreeNode;
 		TREENODEPTR leftSibling;
 		string inTitle, inName;
 
@@ -205,6 +204,13 @@ using namespace std;
 
 		//While end of file has not been reached
 		while (inFile.eof() == false) {
+			TREENODEPTR newNode = new TreeNode;
+			newNode->leftmostChild = TREENULLPTR;
+			newNode->rightSibling = TREENULLPTR;
+			newNode->parent = TREENULLPTR;
+			newNode->name.clear();
+			newNode->title.clear();
+
 			//If current node is null (too many end parens), then return false.
 			if (currentNode == TREENULLPTR) {
 				delete currentNode;
@@ -218,12 +224,6 @@ using namespace std;
 			}
 			//If line isn't a close paren
 			else {
-				//Set all of newNode's data and pointers to null (clear newNode)
-				newNode->leftmostChild = TREENULLPTR;
-				newNode->rightSibling = TREENULLPTR;
-				newNode->parent = TREENULLPTR;
-				newNode->name.clear();
-				newNode->title.clear();
 
 				//Get title and name
 				getline(inFile, inTitle, ',');
@@ -274,6 +274,18 @@ using namespace std;
 
 					//Increase number of nodes by 1
 					nodeCount++;
+
+					//Get rid of newNode to deallocate space
+					//Set all of newNode's data and pointers to null (clear newNode)
+					//newNode = TREENULLPTR;
+					newNode->leftmostChild = TREENULLPTR;
+					newNode->rightSibling = TREENULLPTR;
+					newNode->parent = TREENULLPTR;
+					newNode->name.clear();
+					newNode->title.clear();
+					
+					
+					delete newNode;
 				}
 			}
 		}
@@ -282,7 +294,6 @@ using namespace std;
 		if (currentNode != TREENULLPTR) {
 			return false;
 		}
-
 		delete currentNode;
 		return true;
 	}
@@ -491,3 +502,15 @@ using namespace std;
 		//Once node is deleted, return back up the tree
 		return;
 	}
+
+	//TreeNode::~TreeNode() {
+	//	if (leftmostChild != TREENULLPTR) {
+	//		delete leftmostChild;
+	//	}
+	//	if (this != TREENULLPTR) {
+	//		delete rightSibling;
+	//	}
+	//	if (this != TREENULLPTR) {
+	//		delete parent;
+	//	}
+	//}

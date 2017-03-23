@@ -17,6 +17,7 @@ struct TreeNode {
 	TREENODEPTR parent;
 	TREENODEPTR leftmostChild;
 	TREENODEPTR rightSibling;
+	//~TreeNode();
 };
 
 //For a tree of n employees, the space requirement is 3n pointers.
