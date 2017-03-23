@@ -17,7 +17,6 @@ struct TreeNode {
 	TREENODEPTR parent;
 	TREENODEPTR leftmostChild;
 	TREENODEPTR rightSibling;
-	//~TreeNode();
 };
 
 //For a tree of n employees, the space requirement is 3n pointers.
@@ -103,9 +102,9 @@ public:
 
 
 	//Method to "hire an employee", aka add a node as the last child of the node given by parent
-	//with the title given by newTitle and the name given by newName.
+	//with the title given by newTitle and the name given by newName. Same as hire but returns TREENODEPTR to newly created node;
 	//Best case asymptotic run time of Theta(1) for tree of size n. (new node is first child of parent)
-	//Worst case: Theta (n) (All nodes are children of parent, so must traverse through all right siblings to add as last child)
+	//Worst case: Theta (n) (For a flat tree, must traverse through all children of parent to add as last child)
 	TREENODEPTR returnHire(TREENODEPTR, string, string);
 
 	//Fire the employee whose title matches formerTitle and make all their employee's work directly for the fired employee's boss

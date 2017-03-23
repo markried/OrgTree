@@ -193,6 +193,15 @@ using namespace std;
 		TREENODEPTR leftSibling;
 		string inTitle, inName;
 
+		//Clear tree if there's already one here
+		if (root != TREENULLPTR) {
+			recursiveDelete(root);
+			nodeCount = 0;
+			root = TREENULLPTR;
+		}
+
+		
+
 		//Create filestream
 		ifstream inFile(filename);
 		//Check if file cannot be opened
@@ -227,14 +236,12 @@ using namespace std;
 				if (inName.substr(0, 1) == " ") {
 					inName = inName.substr(1);
 				}
-				//Assign title and name to new node
-				/*newNode->title = inTitle;
-				newNode->name = inName;
-*/
+				
 				//If root does not exist
 				if (root == TREENULLPTR) {
-					//Set new node to be root
-					//root = newNode;
+					//Set root to currentNode and give root title and name
+					//Then null all pointers to avoid floating pointers
+					
 					root = currentNode;
 					root->title = inTitle;
 					root->name = inName;
@@ -250,44 +257,8 @@ using namespace std;
 				}
 				//If root exists
 				else {
+					//Call returnHire to hire the new node and get the node pointer back
 					currentNode = returnHire(currentNode, inTitle, inName);
-					
-					////Set new node's parent to be parent node
-					//newNode->parent = currentNode;
-
-					////If parent node has no children
-					//if (currentNode->leftmostChild == TREENULLPTR) {
-					//	currentNode->leftmostChild = newNode;
-					//}
-					////If parent node has children
-					//else {
-					//	//Set a node to find last child of parent
-					//	leftSibling = currentNode->leftmostChild;
-					//	//While search node's right sibling is not null
-					//	while (leftSibling->rightSibling != TREENULLPTR) {
-					//		//Set search node to be search node's right sibling
-					//		leftSibling = leftSibling->rightSibling;
-					//	}
-					//	//Once last child is found, set its right sibling to be the new node.
-					//	leftSibling->rightSibling = newNode;
-					//}
-
-					////Set new node to be parent node (keep parent trailing)
-					//currentNode = newNode;
-
-					////Increase number of nodes by 1
-					//nodeCount++;
-
-					//Get rid of newNode to deallocate space
-					//Set all of newNode's data and pointers to null (clear newNode)
-					//newNode = TREENULLPTR;
-					//newNode->leftmostChild = TREENULLPTR;
-					//newNode->rightSibling = TREENULLPTR;
-					//newNode->parent = TREENULLPTR;
-					//newNode->name.clear();
-					//newNode->title.clear();
-					//				
-					//delete newNode;
 				}
 			}
 		}
@@ -296,12 +267,13 @@ using namespace std;
 		if (currentNode != TREENULLPTR) {
 			return false;
 		}
+		//Delete currentNode to avoid floating nodes
 		delete currentNode;
 		return true;
 	}
 
 	//Method to "hire an employee", aka add a node as the last child of the node given by parent
-	//with the title given by newTitle and the name given by newName.
+	//with the title given by newTitle and the name given by newName. Same as hire but returns TREENODEPTR to newly created node;
 	//Best case asymptotic run time of Theta(1) for tree of size n. (new node is first child of parent)
 	//Worst case: Theta (n) (For a flat tree, must traverse through all children of parent to add as last child)
 	TREENODEPTR OrgTree::returnHire(TREENODEPTR parent, string newTitle, string newName) {
@@ -509,9 +481,7 @@ using namespace std;
 		//Call recursive delete method to delete every node
 		//Pass root to start at beginning
 		recursiveDelete(root);
-		
-
-
+		nodeCount = 0;
 	}
 
 	//Recursive method to delete everything in the tree
@@ -540,15 +510,3 @@ using namespace std;
 		//Once node is deleted, return back up the tree
 		return;
 	}
-
-	//TreeNode::~TreeNode() {
-	//	if (leftmostChild != TREENULLPTR) {
-	//		delete leftmostChild;
-	//	}
-	//	if (this != TREENULLPTR) {
-	//		delete rightSibling;
-	//	}
-	//	if (this != TREENULLPTR) {
-	//		delete parent;
-	//	}
-	//}

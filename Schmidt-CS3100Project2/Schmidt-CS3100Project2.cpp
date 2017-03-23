@@ -111,6 +111,9 @@ int RaymerTest() {
 	bool testBadExtraParenMid = o5.read("testBadExtraParenMid.txt");
 	bool testBadNotEnoughParensEnd = o6.read("testBadNotEnoughParensEnd.txt");
 	bool testBadNotEnoughParensMid = o7.read("testBadNotEnoughParensMid.txt");
+
+	bool testOverwrite = o2.read("testIn.txt");
+
 	//system("PAUSE");
 	return 0;
 }
