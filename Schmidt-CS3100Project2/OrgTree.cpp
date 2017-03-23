@@ -204,12 +204,7 @@ using namespace std;
 
 		//While end of file has not been reached
 		while (inFile.eof() == false) {
-			TREENODEPTR newNode = new TreeNode;
-			newNode->leftmostChild = TREENULLPTR;
-			newNode->rightSibling = TREENULLPTR;
-			newNode->parent = TREENULLPTR;
-			newNode->name.clear();
-			newNode->title.clear();
+			//TREENODEPTR newNode = new TreeNode;
 
 			//If current node is null (too many end parens), then return false.
 			if (currentNode == TREENULLPTR) {
@@ -224,7 +219,6 @@ using namespace std;
 			}
 			//If line isn't a close paren
 			else {
-
 				//Get title and name
 				getline(inFile, inTitle, ',');
 				getline(inFile, inName, '\n');
@@ -234,13 +228,20 @@ using namespace std;
 					inName = inName.substr(1);
 				}
 				//Assign title and name to new node
-				newNode->title = inTitle;
+				/*newNode->title = inTitle;
 				newNode->name = inName;
-
+*/
 				//If root does not exist
 				if (root == TREENULLPTR) {
 					//Set new node to be root
-					root = newNode;
+					//root = newNode;
+					root = currentNode;
+					root->title = inTitle;
+					root->name = inName;
+					root->leftmostChild = TREENULLPTR;
+					root->parent = TREENULLPTR;
+					root->rightSibling = TREENULLPTR;
+
 					//Set root as parent node
 					currentNode = root;
 
@@ -249,43 +250,44 @@ using namespace std;
 				}
 				//If root exists
 				else {
-					//Set new node's parent to be parent node
-					newNode->parent = currentNode;
+					currentNode = returnHire(currentNode, inTitle, inName);
+					
+					////Set new node's parent to be parent node
+					//newNode->parent = currentNode;
 
-					//If parent node has no children
-					if (currentNode->leftmostChild == TREENULLPTR) {
-						currentNode->leftmostChild = newNode;
-					}
-					//If parent node has children
-					else {
-						//Set a node to find last child of parent
-						leftSibling = currentNode->leftmostChild;
-						//While search node's right sibling is not null
-						while (leftSibling->rightSibling != TREENULLPTR) {
-							//Set search node to be search node's right sibling
-							leftSibling = leftSibling->rightSibling;
-						}
-						//Once last child is found, set its right sibling to be the new node.
-						leftSibling->rightSibling = newNode;
-					}
+					////If parent node has no children
+					//if (currentNode->leftmostChild == TREENULLPTR) {
+					//	currentNode->leftmostChild = newNode;
+					//}
+					////If parent node has children
+					//else {
+					//	//Set a node to find last child of parent
+					//	leftSibling = currentNode->leftmostChild;
+					//	//While search node's right sibling is not null
+					//	while (leftSibling->rightSibling != TREENULLPTR) {
+					//		//Set search node to be search node's right sibling
+					//		leftSibling = leftSibling->rightSibling;
+					//	}
+					//	//Once last child is found, set its right sibling to be the new node.
+					//	leftSibling->rightSibling = newNode;
+					//}
 
-					//Set new node to be parent node (keep parent trailing)
-					currentNode = newNode;
+					////Set new node to be parent node (keep parent trailing)
+					//currentNode = newNode;
 
-					//Increase number of nodes by 1
-					nodeCount++;
+					////Increase number of nodes by 1
+					//nodeCount++;
 
 					//Get rid of newNode to deallocate space
 					//Set all of newNode's data and pointers to null (clear newNode)
 					//newNode = TREENULLPTR;
-					newNode->leftmostChild = TREENULLPTR;
-					newNode->rightSibling = TREENULLPTR;
-					newNode->parent = TREENULLPTR;
-					newNode->name.clear();
-					newNode->title.clear();
-					
-					
-					delete newNode;
+					//newNode->leftmostChild = TREENULLPTR;
+					//newNode->rightSibling = TREENULLPTR;
+					//newNode->parent = TREENULLPTR;
+					//newNode->name.clear();
+					//newNode->title.clear();
+					//				
+					//delete newNode;
 				}
 			}
 		}
@@ -296,6 +298,42 @@ using namespace std;
 		}
 		delete currentNode;
 		return true;
+	}
+
+	//Method to "hire an employee", aka add a node as the last child of the node given by parent
+	//with the title given by newTitle and the name given by newName.
+	//Best case asymptotic run time of Theta(1) for tree of size n. (new node is first child of parent)
+	//Worst case: Theta (n) (For a flat tree, must traverse through all children of parent to add as last child)
+	TREENODEPTR OrgTree::returnHire(TREENODEPTR parent, string newTitle, string newName) {
+		//Create new node
+		TREENODEPTR newNode = new TreeNode;
+		TREENODEPTR child;
+
+		//Increase node count by 1
+		nodeCount++;
+		//Give new node title, name, and parent corresponding to parameters.
+		newNode->title = newTitle;
+		newNode->name = newName;
+		newNode->parent = parent;
+		//Set leftmost child and right sibling to null
+		newNode->leftmostChild = TREENULLPTR;
+		newNode->rightSibling = TREENULLPTR;
+		//If parent of new node has no children, make this its leftmost child
+		if (parent->leftmostChild == TREENULLPTR) {
+			parent->leftmostChild = newNode;
+		}
+		//If parent of new node has children, make this its last child
+		else {
+			//Set child node to be parent's left child
+			child = parent->leftmostChild;
+			//Cycle through children of the parent to find the last child 
+			while (child->rightSibling != TREENULLPTR) {
+				child = child->rightSibling;
+			}
+			//Add new node as right sibling of parent's last child
+			child->rightSibling = newNode;
+		}
+		return newNode;
 	}
 
 	//Writes the org tree to a file with the given filename, using the same format as read
