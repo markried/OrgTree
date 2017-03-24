@@ -52,9 +52,9 @@ int main()
 	//Fire existing non-root node
 	bool fired = test.fire("OldRoot");
 	//Fire root node (should return false)
-	fired = test.fire("Root");
+	bool cantFireRoot = test.fire("Root");
 	//Fire nonexistent node
-	fired = test.fire("YabbaDabbaDoo");
+	bool cantFireWhatWasNeverHired = test.fire("YabbaDabbaDoo");
 
 	//Print full tree
 	test.printSubTree(newBoss);

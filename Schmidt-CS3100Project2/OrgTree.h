@@ -1,4 +1,6 @@
 //IMPLEMENTATION: BINARYIZED TREE
+//For a tree of n employees, the space requirement is 3n pointers.
+
 #pragma once
 #define TREENODEPTR TreeNode*
 #define TREENULLPTR NULL
