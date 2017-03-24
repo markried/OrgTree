@@ -35,7 +35,7 @@ private:
 
 	//Recursive method to print subtree and keep a count of how deep in the subtree the method is (to insert appropriate number of tabs)
 	//Best case runtime: Theta(1) (currentNode is a leaf)
-	//Worst case runtime: Theta(n) (currentNode is the root)
+	//Worst case runtime: Theta(n) (currentNode is the root of a tree of n nodes)
 	void recursivePrintSubTree(TREENODEPTR, int);
 
 	//Function to recursively write each line to output file
@@ -77,7 +77,7 @@ public:
 
 	//Method to print out the subtree starting at node.
 	//Best case runtime: Theta(1) (currentNode is a leaf)
-	//Worst case runtime: Theta(n) (currentNode is the root)
+	//Worst case runtime: Theta(n) (currentNode is the root of a tree of n nodes)
 	void printSubTree(TREENODEPTR);
 
 	//Method to return the TreeNode with the given title.

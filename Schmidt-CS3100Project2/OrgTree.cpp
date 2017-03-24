@@ -95,7 +95,7 @@ using namespace std;
 
 	//Method to print out the subtree starting at node.
 	//Best case runtime: Theta(1) (currentNode is a leaf)
-	//Worst case runtime: Theta(n) (currentNode is the root)
+	//Worst case runtime: Theta(n) (currentNode is the root of a tree of n nodes)
 	void OrgTree::printSubTree(TREENODEPTR subTreeRoot) {
 		//Call recursivePrintSubTree and pass through subTreeRoot and a starting depth of 0 (if subTreeRoot isn't null)
 		if (subTreeRoot != TREENULLPTR) {
@@ -105,7 +105,7 @@ using namespace std;
 
 	//Recursive method to print subtree and keep a count of how deep in the subtree the method is (to insert appropriate number of tabs)
 	//Best case runtime: Theta(1) (currentNode is a leaf)
-	//Worst case runtime: Theta(n) (currentNode is the root)
+	//Worst case runtime: Theta(n) (currentNode is the root of a tree of n nodes)
 	void OrgTree::recursivePrintSubTree(TREENODEPTR currentNode, int depth) {
 		//Declare variables
 		string tabs, nodeName, nodeTitle;
@@ -190,7 +190,6 @@ using namespace std;
 	bool OrgTree::read(string filename) {
 		//Declare variables
 		TREENODEPTR currentNode = new TreeNode;
-		TREENODEPTR leftSibling;
 		string inTitle, inName;
 
 		//Clear tree if there's already one here

@@ -8,6 +8,8 @@ int RaymerTest();
 
 void memLeakTest();
 
+int testCases();
+
 int main()
 {
 	cout << "TEST\tTEST" << endl;
@@ -59,7 +61,7 @@ int main()
 
 	int x = RaymerTest();
 	
-	for (int i = 0; i < 100000; i++) {
+	for (int i = 0; i < 10000; i++) {
 		memLeakTest();
 	}
 	
@@ -79,7 +81,7 @@ int RaymerTest() {
 	o1.printSubTree(o1.getRoot()); //printSubTree from root
 
 
-								   //add two children to root
+	//add two children to root
 	o1.hire(o1.getRoot(), "R3C1", "R3C1");
 	o1.hire(o1.getRoot(), "R3C2", "R3C2");
 
@@ -121,4 +123,26 @@ int RaymerTest() {
 void memLeakTest() {
 	OrgTree testO;
 	testO.read("testIn.txt");
+}
+
+int testCases() {
+	//Leaf
+
+	//One child
+
+	//Two children
+
+	//No sibling
+
+	//Right sibling
+
+	//Leftmost child
+
+	//Not leftmost child
+
+	//Root only
+	
+	
+	
+	return 0;
 }
