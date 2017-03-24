@@ -4,7 +4,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>
 
 using namespace std;
 //For a tree of n employees, the space requirement is 3n pointers.
