@@ -212,8 +212,6 @@ using namespace std;
 
 		//While end of file has not been reached
 		while (inFile.eof() == false) {
-			//TREENODEPTR newNode = new TreeNode;
-
 			//If current node is null (too many end parens), then return false.
 			if (currentNode == TREENULLPTR) {
 				delete currentNode;

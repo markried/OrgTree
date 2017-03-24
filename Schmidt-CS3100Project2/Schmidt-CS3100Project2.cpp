@@ -124,25 +124,3 @@ void memLeakTest() {
 	OrgTree testO;
 	testO.read("testIn.txt");
 }
-
-int testCases() {
-	//Leaf
-
-	//One child
-
-	//Two children
-
-	//No sibling
-
-	//Right sibling
-
-	//Leftmost child
-
-	//Not leftmost child
-
-	//Root only
-	
-	
-	
-	return 0;
-}
